@@ -22,9 +22,9 @@ long int number_of_elitist_ants;
 double maximum_pheromone_trail;
 double minimum_pheromone_trail;
 
-antStruct *ant_colony;
-antStruct *best_so_far_ant;
-antStruct *restart_best_ant;
+ant_struct *ant_colony;
+ant_struct *best_so_far_ant;
+ant_struct *restart_best_ant;
 
 double **pheromone_matrix;
 double **pheromone_times_heuristic_matrix;
@@ -33,33 +33,33 @@ double *probOfSelection;
 
 void allocate_ant_colony_memory(void){
 	long int i;
-	ant_colony = malloc(sizeof(antStruct)*number_of_ants + 
-		sizeof(antStruct *)* number_of_ants);
+	ant_colony = malloc(sizeof(ant_struct)*number_of_ants + 
+		sizeof(ant_struct *)* number_of_ants);
 	if (ant_colony == NULL){
 		printf("Out of memory. exit");
 		exit(1);
 	}
 
 	for (i = 0; i < number_of_ants; i++){
-		ant_colony[i].tour = calloc(numberOfCities + 1, sizeof(long int));
-		ant_colony[i].visited = calloc(numberOfCities, sizeof(char));
+		ant_colony[i].tour = calloc(number_of_cities + 1, sizeof(long int));
+		ant_colony[i].visited = calloc(number_of_cities, sizeof(char));
 	}
 	
-	best_so_far_ant = malloc(sizeof(antStruct));
+	best_so_far_ant = malloc(sizeof(ant_struct));
 	if (best_so_far_ant == NULL){
 		printf("Out of memory. exit");
 		exit(1);
 	}
-	best_so_far_ant->tour = calloc(numberOfCities + 1, sizeof(long int));
-	best_so_far_ant->visited = calloc(numberOfCities, sizeof(char));
+	best_so_far_ant->tour = calloc(number_of_cities + 1, sizeof(long int));
+	best_so_far_ant->visited = calloc(number_of_cities, sizeof(char));
 
-	restart_best_ant = malloc(sizeof(antStruct));
+	restart_best_ant = malloc(sizeof(ant_struct));
 	if (restart_best_ant == NULL){
 		printf("Out of memory. exit");
 		exit(1);
 	}
-	restart_best_ant->tour = calloc(numberOfCities + 1, sizeof(long int));
-	restart_best_ant->visited = calloc(numberOfCities, sizeof(char));
+	restart_best_ant->tour = calloc(number_of_cities + 1, sizeof(long int));
+	restart_best_ant->visited = calloc(number_of_cities, sizeof(char));
 
 	probOfSelection = malloc(sizeof(double)*(number_of_ants + 1));
 	if (probOfSelection == NULL){
@@ -77,36 +77,36 @@ long int get_some_nearest_neighbour_tour_length(void){
 	constructionStepCounter = 0;
 	place_ant(&ant_colony[0], constructionStepCounter);
 
-	while (constructionStepCounter < numberOfCities -1){
+	while (constructionStepCounter < number_of_cities -1){
 		constructionStepCounter ++;
 		move_to_closest_city(&ant_colony[0], constructionStepCounter);
 	}
-	constructionStepCounter = numberOfCities;
-	ant_colony[0].tour[numberOfCities] = ant_colony[0].tour[0];
+	constructionStepCounter = number_of_cities;
+	ant_colony[0].tour[number_of_cities] = ant_colony[0].tour[0];
 	if(local_search_flag){
 		apply_two_opt_first(ant_colony[0].tour);
 	}
 	constructed_tours_counter += 1;
-	ant_colony[0].tour_length = computeTourLength(ant_colony[0].tour);
+	ant_colony[0].tour_length = compute_tour_length(ant_colony[0].tour);
 
 	help = ant_colony[0].tour_length;
 	empty_ant_memory(&ant_colony[0]);
 	return help;
 }
 
-void move_to_closest_city(antStruct *ant, long int constructionStepPhase){
+void move_to_closest_city(ant_struct *ant, long int constructionStepPhase){
 	long int city;
 	long int currentCity;
 	long int nextCity;
 	long int minimumDistance;
 
-	nextCity = numberOfCities;
+	nextCity = number_of_cities;
 	currentCity = ant->tour[constructionStepPhase -1];
 	minimumDistance = INFINITY;
 
-	for(city = 0; city < numberOfCities; city++){
+	for(city = 0; city < number_of_cities; city++){
 		if(!ant->visited[city] &&  
-			instance.distanceMatrix[currentCity][city] < minimumDistance){
+			instance.distance_matrix[currentCity][city] < minimumDistance){
 			nextCity = city;
 		}
 	}
@@ -114,17 +114,17 @@ void move_to_closest_city(antStruct *ant, long int constructionStepPhase){
 	ant->visited[nextCity] = TRUE;	
 }
 
-void empty_ant_memory(antStruct *ant){
+void empty_ant_memory(ant_struct *ant){
 	long int i;
-	for (i = 0; i < numberOfCities; i++){
+	for (i = 0; i < number_of_cities; i++){
 		ant->visited[i] = FALSE;
 	}
 }
 
-void place_ant(antStruct *ant, long int numberOfConstructionSteps){
+void place_ant(ant_struct *ant, long int numberOfConstructionSteps){
 	long int random;
 	random = (long int)(generateRandomBetween0and1(&seed) 
-		* (double) numberOfCities);
+		* (double) number_of_cities);
 
 	ant->tour[numberOfConstructionSteps] = random;
 	ant->visited[random] = TRUE;
@@ -133,7 +133,7 @@ void place_ant(antStruct *ant, long int numberOfConstructionSteps){
 void initialize_pheromone_trails(double initialValue){
 	long int i;
 	long int j;
-	for (i = 0; i < numberOfCities; i++){
+	for (i = 0; i < number_of_cities; i++){
 		for (j = 0; j <= i; j ++){
 			pheromone_matrix[i][j] = initialValue;
 			pheromone_matrix[j][i] = initialValue;
@@ -147,7 +147,7 @@ void calculate_pheromone_times_heuristic_matrix(void){
 	long int i;
 	long int j;
 	printf("Compute total information \n");
-	for (i = 0; i < numberOfCities; i++){
+	for (i = 0; i < number_of_cities; i++){
 		for (j = 0; j < i; j++){
 			pheromone_times_heuristic_matrix[i][j] = pow(pheromone_matrix[i][j], trail_importance) *
 				pow(HEURISTIC(i, j), heuristic_value_importance);

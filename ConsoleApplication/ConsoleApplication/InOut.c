@@ -44,7 +44,7 @@ void init_program(long int argc, char *argv[]){
 
 	printf("Reading problem data - Starting... \n\n");
 	//Hard-coded value. Replace later for command line parameter.
-	instance.nodesArray = read_instance_file("ulysses16.tsp");
+	instance.nodes_array = read_instance_file("ulysses16.tsp");
 	printf("Reading problem data - Done ... \n\n");
 
 	nearest_neighbours_maximal_depth = MIN(number_of_ants -1, 
@@ -55,7 +55,7 @@ void init_program(long int argc, char *argv[]){
 	assert(nearest_neighbours_maximal_depth > 0);
 
 	printf("calculating distance matrix ..\n\n");
-	instance.distanceMatrix = computeDistanceMatrix();
+	instance.distance_matrix = compute_distance_matrix();
 	printf(" .. done\n");
 	show_parameters();
 	printf("allocate ants' memory ..\n\n");
@@ -132,13 +132,13 @@ struct point *read_instance_file(const char *fileName){
 			fscanf(tsp_file, "%s", buf);
 			printf("%s ", buf);
 			fscanf(tsp_file, "%s", buf);
-			strcpy(instance.instanceName, buf);
-			printf("%s \n", instance.instanceName); 
+			strcpy(instance.instance_name, buf);
+			printf("%s \n", instance.instance_name); 
 			buf[0]=0;
 		} else if ( strcmp("NAME:", buf) == 0 ) {
 			fscanf(tsp_file, "%s", buf);
-			strcpy(instance.instanceName, buf);
-			printf("%s \n", instance.instanceName);
+			strcpy(instance.instance_name, buf);
+			printf("%s \n", instance.instance_name);
 			buf[0]=0;
 		} else if ( strcmp("COMMENT", buf) == 0 ){
 			fgets(buf, LINE_BUF_LEN, tsp_file);
@@ -169,16 +169,16 @@ struct point *read_instance_file(const char *fileName){
 		} else if( strcmp("DIMENSION", buf) == 0 ){
 			fscanf(tsp_file, "%s", buf);
 			printf("%s ", buf);
-			fscanf(tsp_file, "%ld", &numberOfCities);
-			instance.numberOfCities = numberOfCities;
-			printf("%ld\n", numberOfCities);
-			assert ( numberOfCities > 2 && numberOfCities < 6000);
+			fscanf(tsp_file, "%ld", &number_of_cities);
+			instance.number_of_cities = number_of_cities;
+			printf("%ld\n", number_of_cities);
+			assert ( number_of_cities > 2 && number_of_cities < 6000);
 			buf[0]=0;
 		} else if ( strcmp("DIMENSION:", buf) == 0 ) {
-			fscanf(tsp_file, "%ld", &numberOfCities);
-			instance.numberOfCities = numberOfCities;
-			printf("%ld\n", numberOfCities);
-			assert ( numberOfCities > 2 && numberOfCities < 6000);
+			fscanf(tsp_file, "%ld", &number_of_cities);
+			instance.number_of_cities = number_of_cities;
+			printf("%ld\n", number_of_cities);
+			assert ( number_of_cities > 2 && number_of_cities < 6000);
 			buf[0]=0;
 		} else if( strcmp("DISPLAY_DATA_TYPE", buf) == 0 ){
 			fgets(buf, LINE_BUF_LEN, tsp_file);
@@ -196,17 +196,17 @@ struct point *read_instance_file(const char *fileName){
 			fscanf(tsp_file, "%s", buf);
 			printf("%s\n", buf);
 			if ( strcmp("EUC_2D", buf) == 0 ) {
-				distanceFunction = getRoundDistance;
+				distance_function = get_round_distance;
 			} else if ( strcmp("CEIL_2D", buf) == 0 ) {
-				distanceFunction = getCeilingDistance;
+				distance_function = get_ceiling_distance;
 			} else if ( strcmp("GEO", buf) == 0 ) {
-				distanceFunction = getGeometricDistance;
+				distance_function = get_geometric_distance;
 			} else if ( strcmp("ATT", buf) == 0 ) {
-				distanceFunction = getAttDistance;
+				distance_function = get_att_distance;
 			} else {
 				fprintf(stderr,"EDGE_WEIGHT_TYPE %s not implemented\n",buf);
 			}
-			strcpy(instance.edgeWeightType, buf);
+			strcpy(instance.edge_weight_type, buf);
 			buf[0]=0;
 		} else if( strcmp("EDGE_WEIGHT_TYPE:", buf) == 0 ){
 			/* set pointer to appropriate distance function; has to be one of 
@@ -217,18 +217,18 @@ struct point *read_instance_file(const char *fileName){
 			printf("%s\n", buf);
 			printf("%s\n", buf);
 			if ( strcmp("EUC_2D", buf) == 0 ) {
-				distanceFunction = getRoundDistance;
+				distance_function = get_round_distance;
 			} else if ( strcmp("CEIL_2D", buf) == 0 ) {
-				distanceFunction = getCeilingDistance;
+				distance_function = get_ceiling_distance;
 			} else if ( strcmp("GEO", buf) == 0 ) {
-				distanceFunction = getGeometricDistance;
+				distance_function = get_geometric_distance;
 			} else if ( strcmp("ATT", buf) == 0 ) {
-				distanceFunction = getAttDistance;
+				distance_function = get_att_distance;
 			} else {
 				fprintf(stderr,"EDGE_WEIGHT_TYPE %s not implemented\n",buf);
 				exit(1);
 			}
-			strcpy(instance.edgeWeightType, buf);
+			strcpy(instance.edge_weight_type, buf);
 			buf[0]=0;
 		}
 		buf[0]=0;
@@ -242,14 +242,14 @@ struct point *read_instance_file(const char *fileName){
 		exit(1);
 	}
 
-	if( (nodeptr = malloc(sizeof(struct point) * numberOfCities)) == NULL ){
+	if( (nodeptr = malloc(sizeof(struct point) * number_of_cities)) == NULL ){
 		exit(EXIT_FAILURE);
 	} else {
-		for ( i = 0 ; i < numberOfCities ; i++ ) {
+		for ( i = 0 ; i < number_of_cities ; i++ ) {
 			fscanf(tsp_file,"%ld %lf %lf", &j, &nodeptr[i].x, &nodeptr[i].y );
 		}
 	}
-	printf("number of cities is %ld\n",numberOfCities);
+	printf("number of cities is %ld\n",number_of_cities);
 	printf("\n... done\n");
 	return (nodeptr);
 }

@@ -9,11 +9,11 @@
 
 int main(int argc, char *argv[]){
 	init_program(argc, argv);
-	instance.nearestNeighboursList = computeNearestNeighboursList();
-	pheromone_matrix = generateDoubleMatrix(numberOfCities, 
-		numberOfCities);
-	pheromone_times_heuristic_matrix = generateDoubleMatrix(numberOfCities, 
-		numberOfCities);
+	instance.nearest_neighbours_list = compute_nearest_neighbours_list();
+	pheromone_matrix = generateDoubleMatrix(number_of_cities, 
+		number_of_cities);
+	pheromone_times_heuristic_matrix = generateDoubleMatrix(number_of_cities, 
+		number_of_cities);
 	printf("Initialization finished \n");
 
 	for (try_counter = 0; try_counter < maximum_independent_tries; try_counter++){
@@ -36,7 +36,7 @@ void initialize_variables_for_trial(long int try_number){
 
 	maximum_pheromone_trail = 1./((evaporation_parameter)*
 		get_some_nearest_neighbour_tour_length());
-	minimum_pheromone_trail = maximum_pheromone_trail/(2. * numberOfCities);
+	minimum_pheromone_trail = maximum_pheromone_trail/(2. * number_of_cities);
 	initialize_pheromone_trails(maximum_pheromone_trail);
 	calculate_pheromone_times_heuristic_matrix();
 }

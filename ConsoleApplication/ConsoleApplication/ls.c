@@ -24,21 +24,21 @@ void apply_two_opt_first(long int *tour){
     long int *pos;               /* positions of cities in tour */ 
     long int *dlb;               /* vector containing don't look bits */ 
   
-    pos = malloc(numberOfCities * sizeof(long int));
-    dlb = malloc(numberOfCities * sizeof(long int));
+    pos = malloc(number_of_cities * sizeof(long int));
+    dlb = malloc(number_of_cities * sizeof(long int));
 
-    for ( i = 0 ; i < numberOfCities ; i++ ) {
+    for ( i = 0 ; i < number_of_cities ; i++ ) {
 		pos[tour[i]] = i;
 		dlb[i] = FALSE;
     }
 
     improvement_flag = TRUE;
-    random_vector = generate_random_permutation( numberOfCities );
+    random_vector = generate_random_permutation( number_of_cities );
 
     while ( improvement_flag ) {
 		improvement_flag = FALSE;
 
-		for (l = 0 ; l < numberOfCities; l++) {
+		for (l = 0 ; l < number_of_cities; l++) {
 			c1 = random_vector[l]; 
 			if ( dont_look_bits_flag  && dlb[c1] )
 				continue;
@@ -46,15 +46,15 @@ void apply_two_opt_first(long int *tour){
 
 			pos_c1 = pos[c1];
 			s_c1 = tour[pos_c1+1];
-			radius = instance.distanceMatrix[c1][s_c1];
+			radius = instance.distance_matrix[c1][s_c1];
 
 			/* First search for c1's nearest neighbours, use successor of c1 */
 			for ( h = 0 ; h < nearest_neighbours_maximal_depth ; h++ ) {
-				c2 = instance.nearestNeighboursList[c1][h]; /* exchange partner, determine its position */
-				if ( radius > instance.distanceMatrix[c1][c2] ) {
+				c2 = instance.nearest_neighbours_list[c1][h]; /* exchange partner, determine its position */
+				if ( radius > instance.distance_matrix[c1][c2] ) {
 					s_c2 = tour[pos[c2]+1];
-					gain =  - radius + instance.distanceMatrix[c1][c2] + 
-						instance.distanceMatrix[s_c1][s_c2] - instance.distanceMatrix[c2][s_c2];
+					gain =  - radius + instance.distance_matrix[c1][c2] + 
+						instance.distance_matrix[s_c1][s_c2] - instance.distance_matrix[c2][s_c2];
 					if ( gain < 0 ) {
 						h1 = c1;
 						h2 = s_c1;
@@ -71,22 +71,22 @@ void apply_two_opt_first(long int *tour){
 			if (pos_c1 > 0)
 				p_c1 = tour[pos_c1-1];
 			else 
-				p_c1 = tour[numberOfCities-1];
-			radius = instance.distanceMatrix[p_c1][c1];
+				p_c1 = tour[number_of_cities-1];
+			radius = instance.distance_matrix[p_c1][c1];
 			for ( h = 0 ; h < nearest_neighbours_maximal_depth ; h++ ) {
-				c2 = instance.nearestNeighboursList[c1][h];  /* exchange partner, determine its position */
-				if ( radius > instance.distanceMatrix[c1][c2] ) {
+				c2 = instance.nearest_neighbours_list[c1][h];  /* exchange partner, determine its position */
+				if ( radius > instance.distance_matrix[c1][c2] ) {
 					pos_c2 = pos[c2];
 					if (pos_c2 > 0)
 						p_c2 = tour[pos_c2-1];
 					else 
-						p_c2 = tour[numberOfCities-1];
+						p_c2 = tour[number_of_cities-1];
 					if ( p_c2 == c1 )
 						continue;
 					if ( p_c1 == c2 )
 						continue;
-					gain =  - radius + instance.distanceMatrix[c1][c2] + 
-						instance.distanceMatrix[p_c1][p_c2] - instance.distanceMatrix[p_c2][c2];
+					gain =  - radius + instance.distance_matrix[c1][c2] + 
+						instance.distance_matrix[p_c1][p_c2] - instance.distance_matrix[p_c2][c2];
 					if ( gain < 0 ) {
 						h1 = p_c1; h2 = c1; h3 = p_c2; h4 = c2; 
 						improve_node = TRUE;
@@ -113,7 +113,7 @@ void apply_two_opt_first(long int *tour){
 					h2 = h4; 
 					h4 = help;
 				}
-				if ( pos[h3] - pos[h2] < numberOfCities / 2 + 1) {
+				if ( pos[h3] - pos[h2] < number_of_cities / 2 + 1) {
 					/* reverse inner part from pos[h2] to pos[h3] */
 					i = pos[h2];
 					j = pos[h3];
@@ -131,7 +131,7 @@ void apply_two_opt_first(long int *tour){
 					i = pos[h1]; 
 					j = pos[h4];
 					if ( j > i )
-						help = numberOfCities - (j - i) + 1;
+						help = number_of_cities - (j - i) + 1;
 					else 
 						help = (i - j) + 1;
 					help = help / 2;
@@ -144,11 +144,11 @@ void apply_two_opt_first(long int *tour){
 						pos[c2] = i;
 						i--; j++;
 						if ( i < 0 )
-							i = numberOfCities-1;
-						if ( j >= numberOfCities )
+							i = number_of_cities-1;
+						if ( j >= number_of_cities )
 							j = 0;
 					}
-					tour[numberOfCities] = tour[0];
+					tour[number_of_cities] = tour[0];
 				}
 			} else {
 				dlb[c1] = TRUE;

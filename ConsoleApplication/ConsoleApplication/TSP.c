@@ -9,10 +9,10 @@
 
 #define M_PI 3.14159265358979323846264
 
-long int numberOfCities;
+long int number_of_cities;
 struct problem instance;
 
-long int (*distanceFunction) (long int, long int);
+long int (*distance_function) (long int, long int);
 
 static double dtrunc(double x){
 	int k;
@@ -21,27 +21,27 @@ static double dtrunc(double x){
 	return x;
 }
 
-long int getRoundDistance(long int i, long int j){
-	double xd = instance.nodesArray[i].x - instance.nodesArray[j].x;
-	double yd = instance.nodesArray[i].y - instance.nodesArray[j].y;
+long int get_round_distance(long int i, long int j){
+	double xd = instance.nodes_array[i].x - instance.nodes_array[j].x;
+	double yd = instance.nodes_array[i].y - instance.nodes_array[j].y;
 	double r  = sqrt(xd*xd + yd*yd) + 0.5;
 	return (long int) r;
 }
 
-long int getCeilingDistance(long int i, long int j){
-	double xd = instance.nodesArray[i].x - instance.nodesArray[j].x;
-	double yd = instance.nodesArray[i].y - instance.nodesArray[j].y;
+long int get_ceiling_distance(long int i, long int j){
+	double xd = instance.nodes_array[i].x - instance.nodes_array[j].x;
+	double yd = instance.nodes_array[i].y - instance.nodes_array[j].y;
 	double r  = sqrt(xd*xd + yd*yd) + 0.000000001;
 	return (long int)r;
 }
 
-long int getGeometricDistance(long int i, long int j){
+long int get_geometric_distance(long int i, long int j){
 	double deg, min;
 	double lati, latj, longi, longj;
 	double q1, q2, q3;
 	long int dd;
-	double x1 = instance.nodesArray[i].x, x2 = instance.nodesArray[j].x, 
-	y1 = instance.nodesArray[i].y, y2 = instance.nodesArray[j].y;
+	double x1 = instance.nodes_array[i].x, x2 = instance.nodes_array[j].x, 
+	y1 = instance.nodes_array[i].y, y2 = instance.nodes_array[j].y;
 
 	deg = dtrunc (x1);
 	min = x1 - deg;
@@ -64,9 +64,9 @@ long int getGeometricDistance(long int i, long int j){
 	return dd;
 }
 
-long int getAttDistance(long int i, long int j){
-	double xd = instance.nodesArray[i].x - instance.nodesArray[j].x;
-	double yd = instance.nodesArray[i].y - instance.nodesArray[j].y;
+long int get_att_distance(long int i, long int j){
+	double xd = instance.nodes_array[i].x - instance.nodes_array[j].x;
+	double yd = instance.nodes_array[i].y - instance.nodes_array[j].y;
 	double rij = sqrt ((xd * xd + yd * yd) / 10.0);
 	double tij = dtrunc (rij);
 	long int dij;
@@ -79,28 +79,28 @@ long int getAttDistance(long int i, long int j){
 	return dij;
 }
 
-long int **computeDistanceMatrix(void){
+long int **compute_distance_matrix(void){
 	long int i;
 	long int j;
 	long int ** matrix;
-	matrix = malloc(sizeof(long int) * numberOfCities * numberOfCities +
-		sizeof(long int *) * numberOfCities);
+	matrix = malloc(sizeof(long int) * number_of_cities * number_of_cities +
+		sizeof(long int *) * number_of_cities);
 
 	if(matrix == NULL){
 		fprintf(stderr, "Out of memory, exit.");
 		exit(1);
 	}
 
-	for (i = 0; i < numberOfCities; i++){
-		matrix[i] = (long int*) (matrix + numberOfCities) + i * numberOfCities;
-		for (j = 0; j < numberOfCities; j++){
-			matrix[i][j] = distanceFunction(i, j);
+	for (i = 0; i < number_of_cities; i++){
+		matrix[i] = (long int*) (matrix + number_of_cities) + i * number_of_cities;
+		for (j = 0; j < number_of_cities; j++){
+			matrix[i][j] = distance_function(i, j);
 		}
 	}
 	return matrix;
 }
 
-long int **computeNearestNeighboursList(void){
+long int **compute_nearest_neighbours_list(void){
 	long int listDepth;
 	long int node;
 	long int i;
@@ -110,30 +110,30 @@ long int **computeNearestNeighboursList(void){
 
 	printf("Computing nearest neighbours list \n");
 	listDepth = MAX(nearest_neighbours_maximal_depth, number_of_ants);
-	if (listDepth >= numberOfCities){
-		listDepth = numberOfCities -1;
+	if (listDepth >= number_of_cities){
+		listDepth = number_of_cities -1;
 	}
 	printf("listDepth = %ld ... \n",listDepth);
 
-	nearestNeighbourList = malloc(sizeof(long int) * numberOfCities * listDepth +
-		numberOfCities * sizeof(long int *)); 
+	nearestNeighbourList = malloc(sizeof(long int) * number_of_cities * listDepth +
+		number_of_cities * sizeof(long int *)); 
 	if (nearestNeighbourList == NULL){
 		exit(EXIT_FAILURE);
 	}
 	
-	distanceVector = calloc(numberOfCities, sizeof(long int));
-	helpVector = calloc(numberOfCities, sizeof(long int));
+	distanceVector = calloc(number_of_cities, sizeof(long int));
+	helpVector = calloc(number_of_cities, sizeof(long int));
 
-	for (node = 0; node < numberOfCities; node++){
-		nearestNeighbourList[node] = (long int *)(nearestNeighbourList + numberOfCities) + 
+	for (node = 0; node < number_of_cities; node++){
+		nearestNeighbourList[node] = (long int *)(nearestNeighbourList + number_of_cities) + 
 			node * listDepth;
-		for (i = 0; i < numberOfCities; i++){
-			distanceVector[i] = instance.distanceMatrix[node][i];
+		for (i = 0; i < number_of_cities; i++){
+			distanceVector[i] = instance.distance_matrix[node][i];
 			helpVector[i] = i;
 		}
 		distanceVector[node] = LONG_MAX;
 
-		applyQuickSort(distanceVector, helpVector, 0, numberOfCities - 1);
+		applyQuickSort(distanceVector, helpVector, 0, number_of_cities - 1);
 
 		for (i = 0; i < listDepth; i++){
 			nearestNeighbourList[node][i] = helpVector[i];
@@ -145,12 +145,12 @@ long int **computeNearestNeighboursList(void){
 	return nearestNeighbourList;
 }
 
-long int computeTourLength(long int *tour){
+long int compute_tour_length(long int *tour){
 	int i = 0;
 	long int tour_length = 0;
 
-	for (i = 0; i < numberOfCities; i++){
-		tour_length += instance.distanceMatrix[tour[i]][tour[i + 1]];
+	for (i = 0; i < number_of_cities; i++){
+		tour_length += instance.distance_matrix[tour[i]][tour[i + 1]];
 	}
 	return tour_length;
 }

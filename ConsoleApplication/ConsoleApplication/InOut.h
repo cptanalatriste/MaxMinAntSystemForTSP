@@ -1,17 +1,17 @@
 #define PROGRAM_IDENTIFIER "\nACO algorithms for the TSP\n"
 #define LINE_BUF_LEN 100
 
-extern long int tryCounter;
-extern long int maximumIndependentTries;
-extern long int constructedToursCounter;
-extern long int iterationCounter;
+extern long int try_counter;
+extern long int maximum_independent_tries;
+extern long int constructed_tours_counter;
+extern long int iteration_counter;
 
-extern long int bestSolutionIteration;
-extern long int restartIteration;
-extern double branchingFactorParameter;
+extern long int best_solution_iteration;
+extern long int restart_iteration;
+extern double branching_factor_parameter;
 
-struct point *readInstanceFile(const char *fileName);
-void initProgram(long int argc, char *argv[]);
-void setDefaultParameters();
-void showParameters(void);
-void initializeVariablesForTrial(long int tryNumber);
+struct point *read_instance_file(const char *file_name);
+void init_program(long int argc, char *argv[]);
+void set_default_parameters();
+void show_parameters(void);
+void initialize_variables_for_trial(long int try_number);

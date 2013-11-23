@@ -86,7 +86,7 @@ long int get_some_nearest_neighbour_tour_length(void){
 	if(localSearchFlag){
 		applyTwoOptFirst(ant_colony[0].tour);
 	}
-	constructedToursCounter += 1;
+	constructed_tours_counter += 1;
 	ant_colony[0].tour_length = computeTourLength(ant_colony[0].tour);
 
 	help = ant_colony[0].tour_length;

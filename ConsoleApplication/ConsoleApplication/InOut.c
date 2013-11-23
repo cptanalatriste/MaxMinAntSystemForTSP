@@ -13,20 +13,20 @@
 
 char fileName[LINE_BUF_LEN];
 
-long int tryCounter;
-long int constructedToursCounter;
-long int iterationCounter;
+long int try_counter;
+long int constructed_tours_counter;
+long int iteration_counter;
 
-long int bestSolutionIteration;
-long int restartIteration;
+long int best_solution_iteration;
+long int restart_iteration;
 
-long int maximumIndependentTries;
+long int maximum_independent_tries;
 long int maximumToursOneTry;
 long int seed;
 double maximumTimeForOneTry;
 long int optimalSolution;
 
-double branchingFactorParameter;
+double branching_factor_parameter;
 double branchingFactorLimit;
 
 long int *bestInTry;
@@ -34,17 +34,17 @@ long int *bestFoundAt;
 double *timeBestFound;
 double *timeTotalRun;
 
-void initProgram(long int argc, char *argv[]){
+void init_program(long int argc, char *argv[]){
 	printf(PROGRAM_IDENTIFIER);
-	setDefaultParameters();
-	bestInTry = calloc(maximumIndependentTries, sizeof(long int));
-	bestFoundAt = calloc(maximumIndependentTries, sizeof(long int));
-	timeBestFound = calloc(maximumIndependentTries, sizeof(double));
-	timeTotalRun = calloc(maximumIndependentTries, sizeof(double));
+	set_default_parameters();
+	bestInTry = calloc(maximum_independent_tries, sizeof(long int));
+	bestFoundAt = calloc(maximum_independent_tries, sizeof(long int));
+	timeBestFound = calloc(maximum_independent_tries, sizeof(double));
+	timeTotalRun = calloc(maximum_independent_tries, sizeof(double));
 
 	printf("Reading problem data - Starting... \n\n");
 	//Hard-coded value. Replace later for command line parameter.
-	instance.nodesArray = readInstanceFile("ulysses16.tsp");
+	instance.nodesArray = read_instance_file("ulysses16.tsp");
 	printf("Reading problem data - Done ... \n\n");
 
 	nearestNeighboursMaximalDepth = MIN(number_of_ants -1, 
@@ -57,13 +57,13 @@ void initProgram(long int argc, char *argv[]){
 	printf("calculating distance matrix ..\n\n");
 	instance.distanceMatrix = computeDistanceMatrix();
 	printf(" .. done\n");
-	showParameters();
+	show_parameters();
 	printf("allocate ants' memory ..\n\n");
 	allocate_ant_colony_memory();
 	printf(" .. done\n");
 }
 
-void showParameters(void){
+void show_parameters(void){
 	fprintf(stdout, "\nParameter-settings: \n\n");
 
 	fprintf(stdout, "localSearchFlag \t\t %ld\n", localSearchFlag);
@@ -74,7 +74,7 @@ void showParameters(void){
 	fprintf(stdout, "heuristicValueImportance \t\t %ld\n", heuristic_value_importance);
 	fprintf(stdout, "evaporationParameter \t\t %ld\n", evaporation_parameter);
 	fprintf(stdout, "bestChoiceProbability \t\t %ld\n", best_choice_probability);
-	fprintf(stdout, "maximumIndependentTries \t\t %ld\n", maximumIndependentTries);
+	fprintf(stdout, "maximumIndependentTries \t\t %ld\n", maximum_independent_tries);
 	fprintf(stdout, "maximumToursOneTry \t\t %ld\n", maximumToursOneTry);
 	fprintf(stdout, "seed \t\t %ld\n", seed);
 	fprintf(stdout, "maximumTimeForOneTry \t\t %ld\n", maximumTimeForOneTry);
@@ -86,7 +86,7 @@ void showParameters(void){
 }
 
 
-void setDefaultParameters(void){
+void set_default_parameters(void){
 	dontLookBitsFlag = TRUE;
 	localSearchFlag = 3;
 	nearestNeighboursMaximalDepth = 20;
@@ -97,7 +97,7 @@ void setDefaultParameters(void){
 	heuristic_value_importance = 2.0;
 	evaporation_parameter = 0.5;
 	best_choice_probability = 0.0;
-	maximumIndependentTries = 10;
+	maximum_independent_tries = 10;
 	maximumToursOneTry = 0;
 
 	seed = (long int) time(NULL);
@@ -111,7 +111,7 @@ void setDefaultParameters(void){
 }
 
 //TODO: Change variable names
-struct point *readInstanceFile(const char *fileName){
+struct point *read_instance_file(const char *fileName){
 	FILE *tsp_file;
 	char buf[LINE_BUF_LEN];
 	long int i, j;

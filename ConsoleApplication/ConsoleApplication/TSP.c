@@ -109,7 +109,7 @@ long int **computeNearestNeighboursList(void){
 	long int *helpVector;
 
 	printf("Computing nearest neighbours list \n");
-	listDepth = MAX(nearestNeighboursMaximalDepth, numberOfAnts);
+	listDepth = MAX(nearestNeighboursMaximalDepth, number_of_ants);
 	if (listDepth >= numberOfCities){
 		listDepth = numberOfCities -1;
 	}
@@ -147,10 +147,10 @@ long int **computeNearestNeighboursList(void){
 
 long int computeTourLength(long int *tour){
 	int i = 0;
-	long int tourLength = 0;
+	long int tour_length = 0;
 
 	for (i = 0; i < numberOfCities; i++){
-		tourLength += instance.distanceMatrix[tour[i]][tour[i + 1]];
+		tour_length += instance.distanceMatrix[tour[i]][tour[i + 1]];
 	}
-	return tourLength;
+	return tour_length;
 }

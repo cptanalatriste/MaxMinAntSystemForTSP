@@ -47,11 +47,11 @@ void initProgram(long int argc, char *argv[]){
 	instance.nodesArray = readInstanceFile("ulysses16.tsp");
 	printf("Reading problem data - Done ... \n\n");
 
-	nearestNeighboursMaximalDepth = MIN(numberOfAnts -1, 
+	nearestNeighboursMaximalDepth = MIN(number_of_ants -1, 
 		nearestNeighboursMaximalDepth);
-	assert(numberOfAnts < MAXIMUM_NUMBER_OF_ANTS);
-	assert(nearestNeighboursListLength < MAXIMUM_NEAREST_NEIGHBOURS);
-	assert(nearestNeighboursListLength > 0);
+	assert(number_of_ants < MAXIMUM_NUMBER_OF_ANTS);
+	assert(nearest_neighbours_list_length < MAXIMUM_NEAREST_NEIGHBOURS);
+	assert(nearest_neighbours_list_length > 0);
 	assert(nearestNeighboursMaximalDepth > 0);
 
 	printf("calculating distance matrix ..\n\n");
@@ -59,7 +59,7 @@ void initProgram(long int argc, char *argv[]){
 	printf(" .. done\n");
 	showParameters();
 	printf("allocate ants' memory ..\n\n");
-	allocateAntColonyMemory();
+	allocate_ant_colony_memory();
 	printf(" .. done\n");
 }
 
@@ -68,19 +68,19 @@ void showParameters(void){
 
 	fprintf(stdout, "localSearchFlag \t\t %ld\n", localSearchFlag);
 	fprintf(stdout, "nearestNeighboursMaximalDepth \t\t %ld\n", nearestNeighboursMaximalDepth);
-	fprintf(stdout, "numberOfAnts \t\t %ld\n", numberOfAnts);
-	fprintf(stdout, "nearestNeighboursListLength \t\t %ld\n", nearestNeighboursListLength);
-	fprintf(stdout, "trailImportance \t\t %ld\n", trailImportance);
-	fprintf(stdout, "heuristicValueImportance \t\t %ld\n", heuristicValueImportance);
-	fprintf(stdout, "evaporationParameter \t\t %ld\n", evaporationParameter);
-	fprintf(stdout, "bestChoiceProbability \t\t %ld\n", bestChoiceProbability);
+	fprintf(stdout, "numberOfAnts \t\t %ld\n", number_of_ants);
+	fprintf(stdout, "nearestNeighboursListLength \t\t %ld\n", nearest_neighbours_list_length);
+	fprintf(stdout, "trailImportance \t\t %ld\n", trail_importance);
+	fprintf(stdout, "heuristicValueImportance \t\t %ld\n", heuristic_value_importance);
+	fprintf(stdout, "evaporationParameter \t\t %ld\n", evaporation_parameter);
+	fprintf(stdout, "bestChoiceProbability \t\t %ld\n", best_choice_probability);
 	fprintf(stdout, "maximumIndependentTries \t\t %ld\n", maximumIndependentTries);
 	fprintf(stdout, "maximumToursOneTry \t\t %ld\n", maximumToursOneTry);
 	fprintf(stdout, "seed \t\t %ld\n", seed);
 	fprintf(stdout, "maximumTimeForOneTry \t\t %ld\n", maximumTimeForOneTry);
 	fprintf(stdout, "optimalSolution\t\t %ld\n", optimalSolution);
-	fprintf(stdout, "maxMinAntSystemFlag \t\t %ld\n", maxMinAntSystemFlag);
-	fprintf(stdout, "numberOfElitistAnts \t\t %ld\n", numberOfElitistAnts);
+	fprintf(stdout, "maxMinAntSystemFlag \t\t %ld\n", max_min_ant_system_flag);
+	fprintf(stdout, "numberOfElitistAnts \t\t %ld\n", number_of_elitist_ants);
 
 	fprintf(stdout, "\n");
 }
@@ -90,13 +90,13 @@ void setDefaultParameters(void){
 	dontLookBitsFlag = TRUE;
 	localSearchFlag = 3;
 	nearestNeighboursMaximalDepth = 20;
-	numberOfAnts = 25;
-	nearestNeighboursListLength = 20;
+	number_of_ants = 25;
+	nearest_neighbours_list_length = 20;
 
-	trailImportance = 1.0;
-	heuristicValueImportance = 2.0;
-	evaporationParameter = 0.5;
-	bestChoiceProbability = 0.0;
+	trail_importance = 1.0;
+	heuristic_value_importance = 2.0;
+	evaporation_parameter = 0.5;
+	best_choice_probability = 0.0;
 	maximumIndependentTries = 10;
 	maximumToursOneTry = 0;
 
@@ -105,9 +105,9 @@ void setDefaultParameters(void){
 
 	optimalSolution = 1;
 	branchingFactorLimit = 1.00001;
-	iterationsToUpdateBestAnt = INFINITY;
-	maxMinAntSystemFlag = TRUE;
-	numberOfElitistAnts = 0;	
+	iterations_to_update_best_ant = INFINITY;
+	max_min_ant_system_flag = TRUE;
+	number_of_elitist_ants = 0;	
 }
 
 //TODO: Change variable names

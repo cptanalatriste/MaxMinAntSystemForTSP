@@ -5,11 +5,11 @@
 #include "utilities.h"
 #include "ls.h"
 
-long int localSearchFlag;
-long int dontLookBitsFlag;
-long int nearestNeighboursMaximalDepth;
+long int local_search_flag;
+long int dont_look_bits_flag;
+long int nearest_neighbours_maximal_depth;
 
-void applyTwoOptFirst(long int *tour){
+void apply_two_opt_first(long int *tour){
 	//TODO: Improve code formatting
     long int c1, c2;             /* cities considered for an exchange */
     long int s_c1, s_c2;         /* successor cities of c1 and c2     */
@@ -33,14 +33,14 @@ void applyTwoOptFirst(long int *tour){
     }
 
     improvement_flag = TRUE;
-    random_vector = generateRandomPermutation( numberOfCities );
+    random_vector = generate_random_permutation( numberOfCities );
 
     while ( improvement_flag ) {
 		improvement_flag = FALSE;
 
 		for (l = 0 ; l < numberOfCities; l++) {
 			c1 = random_vector[l]; 
-			if ( dontLookBitsFlag  && dlb[c1] )
+			if ( dont_look_bits_flag  && dlb[c1] )
 				continue;
 			improve_node = FALSE;
 
@@ -49,7 +49,7 @@ void applyTwoOptFirst(long int *tour){
 			radius = instance.distanceMatrix[c1][s_c1];
 
 			/* First search for c1's nearest neighbours, use successor of c1 */
-			for ( h = 0 ; h < nearestNeighboursMaximalDepth ; h++ ) {
+			for ( h = 0 ; h < nearest_neighbours_maximal_depth ; h++ ) {
 				c2 = instance.nearestNeighboursList[c1][h]; /* exchange partner, determine its position */
 				if ( radius > instance.distanceMatrix[c1][c2] ) {
 					s_c2 = tour[pos[c2]+1];
@@ -73,7 +73,7 @@ void applyTwoOptFirst(long int *tour){
 			else 
 				p_c1 = tour[numberOfCities-1];
 			radius = instance.distanceMatrix[p_c1][c1];
-			for ( h = 0 ; h < nearestNeighboursMaximalDepth ; h++ ) {
+			for ( h = 0 ; h < nearest_neighbours_maximal_depth ; h++ ) {
 				c2 = instance.nearestNeighboursList[c1][h];  /* exchange partner, determine its position */
 				if ( radius > instance.distanceMatrix[c1][c2] ) {
 					pos_c2 = pos[c2];
@@ -163,7 +163,7 @@ void applyTwoOptFirst(long int *tour){
     free( pos );
 }
 
-long int * generateRandomPermutation( long int arrayLenght ){
+long int * generate_random_permutation( long int arrayLenght ){
 	long int  i, help, node, tot_assigned = 0;
 	double    rnd;
 	long int  *r;

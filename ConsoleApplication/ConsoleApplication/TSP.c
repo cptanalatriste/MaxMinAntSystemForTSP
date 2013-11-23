@@ -109,7 +109,7 @@ long int **computeNearestNeighboursList(void){
 	long int *helpVector;
 
 	printf("Computing nearest neighbours list \n");
-	listDepth = MAX(nearestNeighboursMaximalDepth, number_of_ants);
+	listDepth = MAX(nearest_neighbours_maximal_depth, number_of_ants);
 	if (listDepth >= numberOfCities){
 		listDepth = numberOfCities -1;
 	}

@@ -47,12 +47,12 @@ void init_program(long int argc, char *argv[]){
 	instance.nodesArray = read_instance_file("ulysses16.tsp");
 	printf("Reading problem data - Done ... \n\n");
 
-	nearestNeighboursMaximalDepth = MIN(number_of_ants -1, 
-		nearestNeighboursMaximalDepth);
+	nearest_neighbours_maximal_depth = MIN(number_of_ants -1, 
+		nearest_neighbours_maximal_depth);
 	assert(number_of_ants < MAXIMUM_NUMBER_OF_ANTS);
 	assert(nearest_neighbours_list_length < MAXIMUM_NEAREST_NEIGHBOURS);
 	assert(nearest_neighbours_list_length > 0);
-	assert(nearestNeighboursMaximalDepth > 0);
+	assert(nearest_neighbours_maximal_depth > 0);
 
 	printf("calculating distance matrix ..\n\n");
 	instance.distanceMatrix = computeDistanceMatrix();
@@ -66,8 +66,8 @@ void init_program(long int argc, char *argv[]){
 void show_parameters(void){
 	fprintf(stdout, "\nParameter-settings: \n\n");
 
-	fprintf(stdout, "localSearchFlag \t\t %ld\n", localSearchFlag);
-	fprintf(stdout, "nearestNeighboursMaximalDepth \t\t %ld\n", nearestNeighboursMaximalDepth);
+	fprintf(stdout, "localSearchFlag \t\t %ld\n", local_search_flag);
+	fprintf(stdout, "nearestNeighboursMaximalDepth \t\t %ld\n", nearest_neighbours_maximal_depth);
 	fprintf(stdout, "numberOfAnts \t\t %ld\n", number_of_ants);
 	fprintf(stdout, "nearestNeighboursListLength \t\t %ld\n", nearest_neighbours_list_length);
 	fprintf(stdout, "trailImportance \t\t %ld\n", trail_importance);
@@ -87,9 +87,9 @@ void show_parameters(void){
 
 
 void set_default_parameters(void){
-	dontLookBitsFlag = TRUE;
-	localSearchFlag = 3;
-	nearestNeighboursMaximalDepth = 20;
+	dont_look_bits_flag = TRUE;
+	local_search_flag = 3;
+	nearest_neighbours_maximal_depth = 20;
 	number_of_ants = 25;
 	nearest_neighbours_list_length = 20;
 

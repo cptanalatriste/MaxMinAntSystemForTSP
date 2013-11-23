@@ -83,8 +83,8 @@ long int get_some_nearest_neighbour_tour_length(void){
 	}
 	constructionStepCounter = numberOfCities;
 	ant_colony[0].tour[numberOfCities] = ant_colony[0].tour[0];
-	if(localSearchFlag){
-		applyTwoOptFirst(ant_colony[0].tour);
+	if(local_search_flag){
+		apply_two_opt_first(ant_colony[0].tour);
 	}
 	constructed_tours_counter += 1;
 	ant_colony[0].tour_length = computeTourLength(ant_colony[0].tour);

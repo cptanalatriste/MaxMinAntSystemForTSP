@@ -1,6 +1,6 @@
-extern long int dontLookBitsFlag;
-extern long int localSearchFlag;
-extern long int nearestNeighboursMaximalDepth;
+extern long int dont_look_bits_flag;
+extern long int local_search_flag;
+extern long int nearest_neighbours_maximal_depth;
 
-void applyTwoOptFirst(long int *tour);
-long int * generateRandomPermutation( long int arrayLenght );
+void apply_two_opt_first(long int *tour);
+long int * generate_random_permutation( long int arrayLenght );

@@ -10,6 +10,7 @@ long int dont_look_bits_flag;
 long int nearest_neighbours_maximal_depth;
 
 void apply_two_opt_first(long int *tour){
+
 	//TODO: Improve code formatting
     long int c1, c2;             /* cities considered for an exchange */
     long int s_c1, s_c2;         /* successor cities of c1 and c2     */
@@ -24,6 +25,8 @@ void apply_two_opt_first(long int *tour){
     long int *pos;               /* positions of cities in tour */ 
     long int *dlb;               /* vector containing don't look bits */ 
   
+		printf("$$$$$$$$$$$$$$$$$$$ nearest_neighbours_maximal_depth $$$$$$$$$$$$$: %d \n", nearest_neighbours_maximal_depth);
+
     pos = malloc(number_of_cities * sizeof(long int));
     dlb = malloc(number_of_cities * sizeof(long int));
 

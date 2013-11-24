@@ -47,7 +47,7 @@ void init_program(long int argc, char *argv[]){
 	instance.nodes_array = read_instance_file("ulysses16.tsp");
 	printf("Reading problem data - Done ... \n\n");
 
-	nearest_neighbours_maximal_depth = MIN(number_of_ants -1, 
+	nearest_neighbours_maximal_depth = MIN(number_of_cities -1, 
 		nearest_neighbours_maximal_depth);
 	assert(number_of_ants < MAXIMUM_NUMBER_OF_ANTS);
 	assert(nearest_neighbours_list_length < MAXIMUM_NEAREST_NEIGHBOURS);

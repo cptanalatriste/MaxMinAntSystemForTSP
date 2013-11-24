@@ -29,7 +29,7 @@ ant_struct *restart_best_ant;
 double **pheromone_matrix;
 double **pheromone_times_heuristic_matrix;
 
-double *probOfSelection;
+double *selection_probabilities;
 
 void allocate_ant_colony_memory(void){
 	long int i;
@@ -61,12 +61,12 @@ void allocate_ant_colony_memory(void){
 	restart_best_ant->tour = calloc(number_of_cities + 1, sizeof(long int));
 	restart_best_ant->visited = calloc(number_of_cities, sizeof(char));
 
-	probOfSelection = malloc(sizeof(double)*(number_of_ants + 1));
-	if (probOfSelection == NULL){
+	selection_probabilities = malloc(sizeof(double)*(number_of_ants + 1));
+	if (selection_probabilities == NULL){
 		printf("Out of memory. exit");
 		exit(1);
 	}
-	probOfSelection[number_of_ants] = HUGE_VAL;
+	selection_probabilities[number_of_ants] = HUGE_VAL;
 }
 
 long int get_some_nearest_neighbour_tour_length(void){
@@ -91,6 +91,7 @@ long int get_some_nearest_neighbour_tour_length(void){
 
 	help = ant_colony[0].tour_length;
 	empty_ant_memory(&ant_colony[0]);
+	printf("$$$$$$$$$$$$$$ help $$$$$$$$$$: %d \n", help);
 	return help;
 }
 
@@ -156,18 +157,112 @@ void calculate_pheromone_times_heuristic_matrix(void){
 	}
 }
 
-void choose_next_city_and_move(ant_struct *ant, long int constructionStep){
+void choose_next_city_and_move(ant_struct *ant, long int construction_step){
 	long int i;
-	long int help;
+	long int nearest_neighbour;
 	long int current_city;
 	double random;
 	double partial_sum = 0.0;
 	double sum_prob = 0.0;
 
-	double *selection_probabilities;
+	double *selection_probabilities_aux;
 
 	if(best_choice_probability > 0.0 && 
 		generate_random_between_0_and_1(&seed) < best_choice_probability){
-
+			choose_best_next_city(ant, construction_step);
+			return;
 	}
+
+	selection_probabilities_aux = selection_probabilities;
+	current_city = ant->tour[construction_step - 1];
+
+	printf("---current_city: %d \n", current_city);
+
+	// A correction to the original implementation is made
+	//for(i = 0; i < nearest_neighbours_maximal_depth; i++){
+	for(i = 0; i < number_of_ants; i++){
+		printf("checking nearest neighbour: %d -> %d\n", i,	 
+			instance.nearest_neighbours_list[current_city][i]);
+		if (ant->visited[instance.nearest_neighbours_list[current_city][i]]){
+			selection_probabilities_aux[i] = 0.0;
+		} else {
+			selection_probabilities_aux[i] = 
+				pheromone_times_heuristic_matrix[current_city]
+					[instance.nearest_neighbours_list[current_city] [i]];
+			sum_prob += selection_probabilities_aux[i];
+		}
+	}
+
+	if (sum_prob <= 0.0){
+		choose_global_best_next_city(ant, construction_step);
+	} else {
+		random =  generate_random_between_0_and_1(&seed);
+		random *= sum_prob;
+		i = 0;
+		partial_sum = selection_probabilities_aux[i];
+		while (partial_sum <= random){
+			i++;
+			partial_sum += selection_probabilities_aux[i];
+		}
+
+		if (i == number_of_ants){
+			choose_best_next_city(ant, construction_step);
+			return;
+		}
+		nearest_neighbour = instance.nearest_neighbours_list[current_city][i];
+		ant->tour[construction_step] = nearest_neighbour;
+		ant->visited[nearest_neighbour] = TRUE;
+	}
+}
+
+void choose_best_next_city(ant_struct *ant, long int construction_step){
+	long int i;
+	long int current_city;
+	long int next_city;
+	long int nearest_city;
+	double best_value;
+	double pheromone_times_heuristic;
+
+	next_city = number_of_cities;
+	current_city = ant->tour[construction_step -1];
+	best_value = -1;
+
+	for (i = 0; i< number_of_ants; i++){
+		nearest_city = instance.nearest_neighbours_list[current_city][i];
+		if (!ant->visited[nearest_city]){
+			pheromone_times_heuristic = pheromone_times_heuristic_matrix[current_city][nearest_city];
+			if (pheromone_times_heuristic > best_value){
+				best_value = pheromone_times_heuristic;
+				next_city = nearest_city;
+			}
+		}
+	}
+
+	if (next_city == number_of_cities){
+		choose_global_best_next_city(ant, construction_step);
+	} else {
+		ant->tour[construction_step] = next_city;
+		ant->visited[next_city] = TRUE;
+	}
+}
+
+void choose_global_best_next_city(ant_struct *ant, long int construction_step){
+	long int city;
+	long int current_city;
+	long int next_city;
+	double best_value;
+
+	next_city = number_of_cities;
+	current_city = ant->tour[construction_step - 1];
+	best_value = -1;
+
+	for (city = 0; city < number_of_cities;){
+		if (!ant->visited[city] && 
+			pheromone_times_heuristic_matrix[current_city][city] > best_value){
+				next_city = city;
+				best_value = pheromone_times_heuristic_matrix[current_city][city];
+		}
+	}
+	ant->tour[construction_step] = next_city;
+	ant->visited[next_city] = TRUE;
 }

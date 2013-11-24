@@ -27,9 +27,19 @@ void construct_solutions(void){
 
 	while(construction_step_counter < number_of_cities - 1){
 		construction_step_counter++;
-		choose_next_city_and_move(&ant_colony[k], construction_step_counter);
+		printf("*********** construction_step_counter ***********: %d \n", construction_step_counter);
+		for (k = 0; k < number_of_ants; k++){
+			printf("+++++  current ant: +++++++++ *: %d \n", k);
+			choose_next_city_and_move(&ant_colony[k], construction_step_counter);
+		}
 	}
-
+	construction_step_counter = number_of_cities;
+	for (k = 0; k < number_of_ants; k++){
+		ant_colony[k].tour[number_of_cities] = ant_colony[k].tour[0];
+		ant_colony[k].tour_length = compute_tour_length(ant_colony[k].tour);
+	}
+	constructed_tours_counter += number_of_ants;
+	printf("constructed_tours_counter: %d", constructed_tours_counter);
 }
 
 int main(int argc, char *argv[]){

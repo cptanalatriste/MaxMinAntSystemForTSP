@@ -174,7 +174,7 @@ long int * generate_random_permutation( long int arrayLenght ){
 		r[i] = i;
 	}
 	for ( i = 0 ; i < arrayLenght ; i++ ) {
-		rnd  = generateRandomBetween0and1( &seed );
+		rnd  = generate_random_between_0_and_1( &seed );
 		node = (long int) (rnd  * (arrayLenght - tot_assigned)); 
 		help = r[i];
 		r[i] = r[i+node];

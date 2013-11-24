@@ -3,6 +3,9 @@
 
 extern long int try_counter;
 extern long int maximum_independent_tries;
+extern long int maximum_tours_one_try;
+long int optimal_solution;
+
 extern long int constructed_tours_counter;
 extern long int iteration_counter;
 

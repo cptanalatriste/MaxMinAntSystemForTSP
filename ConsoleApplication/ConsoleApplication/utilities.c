@@ -3,7 +3,7 @@
 
 #include "utilities.h"
 
-void swapItems(long int v[], long int v2[], long int i, long int j){
+void swap_items(long int v[], long int v2[], long int i, long int j){
 	long int tmp;
 	tmp = v[i];
 	v[i] = v[j];
@@ -13,25 +13,25 @@ void swapItems(long int v[], long int v2[], long int i, long int j){
 	v2[j] = tmp;
 }
 
-void applyQuickSort(long int v[], long int v2[], long int left, long int right){
+void apply_quick_sort(long int v[], long int v2[], long int left, long int right){
   long int k, last;
 
   if (left >= right){ 
     return;
   }
-  swapItems(v, v2, left, (left + right)/2);
+  swap_items(v, v2, left, (left + right)/2);
   last = left;
   for (k=left+1; k <= right; k++){
     if (v[k] < v[left]){
-		swapItems(v, v2, ++last, k);
+		swap_items(v, v2, ++last, k);
 	}
   }
-  swapItems(v, v2, left, last);
-  applyQuickSort(v, v2, left, last);
-  applyQuickSort(v, v2, last+1, right);
+  swap_items(v, v2, left, last);
+  apply_quick_sort(v, v2, left, last);
+  apply_quick_sort(v, v2, last+1, right);
 }
 
-double **generateDoubleMatrix(long int n, long int m){
+double **generate_double_matrix(long int n, long int m){
 	long int i;
 	double **matrix;
 
@@ -46,7 +46,7 @@ double **generateDoubleMatrix(long int n, long int m){
 	return matrix;
 }
 
-double generateRandomBetween0and1(long *currentSeed){
+double generate_random_between_0_and_1(long *currentSeed){
 	long k;
 	double answer;
 

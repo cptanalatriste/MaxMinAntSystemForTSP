@@ -21,10 +21,10 @@ long int best_solution_iteration;
 long int restart_iteration;
 
 long int maximum_independent_tries;
-long int maximumToursOneTry;
+long int maximum_tours_one_try;
 long int seed;
 double maximumTimeForOneTry;
-long int optimalSolution;
+long int optimal_solution;
 
 double branching_factor_parameter;
 double branchingFactorLimit;
@@ -75,10 +75,10 @@ void show_parameters(void){
 	fprintf(stdout, "evaporationParameter \t\t %ld\n", evaporation_parameter);
 	fprintf(stdout, "bestChoiceProbability \t\t %ld\n", best_choice_probability);
 	fprintf(stdout, "maximumIndependentTries \t\t %ld\n", maximum_independent_tries);
-	fprintf(stdout, "maximumToursOneTry \t\t %ld\n", maximumToursOneTry);
+	fprintf(stdout, "maximumToursOneTry \t\t %ld\n", maximum_tours_one_try);
 	fprintf(stdout, "seed \t\t %ld\n", seed);
 	fprintf(stdout, "maximumTimeForOneTry \t\t %ld\n", maximumTimeForOneTry);
-	fprintf(stdout, "optimalSolution\t\t %ld\n", optimalSolution);
+	fprintf(stdout, "optimalSolution\t\t %ld\n", optimal_solution);
 	fprintf(stdout, "maxMinAntSystemFlag \t\t %ld\n", max_min_ant_system_flag);
 	fprintf(stdout, "numberOfElitistAnts \t\t %ld\n", number_of_elitist_ants);
 
@@ -98,12 +98,12 @@ void set_default_parameters(void){
 	evaporation_parameter = 0.5;
 	best_choice_probability = 0.0;
 	maximum_independent_tries = 10;
-	maximumToursOneTry = 0;
+	maximum_tours_one_try = 0;
 
 	seed = (long int) time(NULL);
 	maximumTimeForOneTry = 10.0;
 
-	optimalSolution = 1;
+	optimal_solution = 1;
 	branchingFactorLimit = 1.00001;
 	iterations_to_update_best_ant = INFINITY;
 	max_min_ant_system_flag = TRUE;

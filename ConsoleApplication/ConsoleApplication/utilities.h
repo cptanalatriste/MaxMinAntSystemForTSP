@@ -13,7 +13,7 @@
 
 extern long int seed;
 
-void swapItems(long int v[], long int v2[], long int i, long int j);
-void applyQuickSort(long int v[], long int v2[], long int left, long int right);
-double **generateDoubleMatrix(long int n, long int m);
-double generateRandomBetween0and1(long *currentSeed);
+void swap_items(long int v[], long int v2[], long int i, long int j);
+void apply_quick_sort(long int v[], long int v2[], long int left, long int right);
+double **generate_double_matrix(long int n, long int m);
+double generate_random_between_0_and_1(long *current_seed);

@@ -133,7 +133,7 @@ long int **compute_nearest_neighbours_list(void){
 		}
 		distanceVector[node] = LONG_MAX;
 
-		applyQuickSort(distanceVector, helpVector, 0, number_of_cities - 1);
+		apply_quick_sort(distanceVector, helpVector, 0, number_of_cities - 1);
 
 		for (i = 0; i < listDepth; i++){
 			nearestNeighbourList[node][i] = helpVector[i];

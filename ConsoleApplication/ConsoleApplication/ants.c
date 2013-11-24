@@ -123,7 +123,7 @@ void empty_ant_memory(ant_struct *ant){
 
 void place_ant(ant_struct *ant, long int numberOfConstructionSteps){
 	long int random;
-	random = (long int)(generateRandomBetween0and1(&seed) 
+	random = (long int)(generate_random_between_0_and_1(&seed) 
 		* (double) number_of_cities);
 
 	ant->tour[numberOfConstructionSteps] = random;
@@ -153,5 +153,21 @@ void calculate_pheromone_times_heuristic_matrix(void){
 				pow(HEURISTIC(i, j), heuristic_value_importance);
 			pheromone_times_heuristic_matrix[j][i] = pheromone_times_heuristic_matrix[i][j];
 		}
+	}
+}
+
+void choose_next_city_and_move(ant_struct *ant, long int constructionStep){
+	long int i;
+	long int help;
+	long int current_city;
+	double random;
+	double partial_sum = 0.0;
+	double sum_prob = 0.0;
+
+	double *selection_probabilities;
+
+	if(best_choice_probability > 0.0 && 
+		generate_random_between_0_and_1(&seed) < best_choice_probability){
+
 	}
 }

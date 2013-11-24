@@ -40,3 +40,4 @@ void empty_ant_memory(ant_struct *ant);
 void place_ant(ant_struct *ant, long int number_of_construction_steps);
 void move_to_closest_city(ant_struct *ant, long int construction_step_phase);
 void calculate_pheromone_times_heuristic_matrix(void);
+void choose_next_city_and_move(ant_struct *ant, long int constructionStep);

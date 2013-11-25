@@ -10,6 +10,7 @@ extern long int constructed_tours_counter;
 extern long int iteration_counter;
 
 extern long int best_solution_iteration;
+extern long int restart_best_solution_iteration;
 extern long int restart_iteration;
 extern double branching_factor_parameter;
 

@@ -18,6 +18,8 @@ long int constructed_tours_counter;
 long int iteration_counter;
 
 long int best_solution_iteration;
+long int restart_best_solution_iteration;
+
 long int restart_iteration;
 
 long int maximum_independent_tries;
@@ -45,6 +47,8 @@ void init_program(long int argc, char *argv[]){
 	printf("Reading problem data - Starting... \n\n");
 	//Hard-coded value. Replace later for command line parameter.
 	instance.nodes_array = read_instance_file("ulysses16.tsp");
+	//instance.nodes_array = read_instance_file("eil51.tsp");
+
 	printf("Reading problem data - Done ... \n\n");
 
 	nearest_neighbours_maximal_depth = MIN(number_of_cities -1, 

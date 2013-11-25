@@ -109,9 +109,11 @@ long int **compute_nearest_neighbours_list(void){
 	long int *helpVector;
 
 	printf("Computing nearest neighbours list \n");
-	listDepth = MAX(nearest_neighbours_maximal_depth, number_of_ants);
+	listDepth = MAX(nearest_neighbours_maximal_depth, nearest_neighbours_list_length);
 	if (listDepth >= number_of_cities){
 		listDepth = number_of_cities -1;
+		//TODO (cgavidia): This a modification of the original algorithm, necesary for small problem sets
+		nearest_neighbours_list_length = listDepth;
 	}
 	printf("listDepth = %ld ... \n",listDepth);
 

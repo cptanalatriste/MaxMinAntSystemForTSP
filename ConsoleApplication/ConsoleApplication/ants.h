@@ -43,3 +43,5 @@ void calculate_pheromone_times_heuristic_matrix(void);
 void choose_next_city_and_move(ant_struct *ant, long int construction_step);
 void choose_best_next_city(ant_struct* ant, long int construction_step);
 void choose_global_best_next_city(ant_struct* ant, long int construction_step);
+long int get_best_ant_from_iteration(void);
+void transfer_solution(ant_struct *from, ant_struct *to);

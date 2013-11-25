@@ -6,13 +6,14 @@
 #include "ants.h"
 #include "utilities.h"
 #include "InOut.h"
+#include "ls.h"
 
 long int is_termination_condition_met(void){
 	return (constructed_tours_counter >= maximum_tours_one_try) &&
 		(best_so_far_ant->tour_length <= optimal_solution);
 }
 
-void construct_solutions(void){
+void construct_solutions(void){	
 	long int k;
 	long int construction_step_counter;
 
@@ -27,9 +28,7 @@ void construct_solutions(void){
 
 	while(construction_step_counter < number_of_cities - 1){
 		construction_step_counter++;
-		printf("*********** construction_step_counter ***********: %d \n", construction_step_counter);
 		for (k = 0; k < number_of_ants; k++){
-			printf("+++++  current ant: +++++++++ *: %d \n", k);
 			choose_next_city_and_move(&ant_colony[k], construction_step_counter);
 		}
 	}
@@ -39,7 +38,36 @@ void construct_solutions(void){
 		ant_colony[k].tour_length = compute_tour_length(ant_colony[k].tour);
 	}
 	constructed_tours_counter += number_of_ants;
-	printf("constructed_tours_counter: %d", constructed_tours_counter);
+}
+
+void apply_local_search(void){
+	//TODO (cgavidia): Currently, we're only soporting 3-opt local search 
+	long int k;
+	printf("Apply local search to all ants \n");
+	for (k = 0; k < number_of_ants; k++){
+		apply_three_opt_search(ant_colony[k].tour);
+		ant_colony[k].tour_length = compute_tour_length(ant_colony[k].tour);
+		if(is_termination_condition_met()){
+			return;
+		}
+	}
+}
+
+void update_statiscal_information(void){
+	long int iteration_best_ant;
+	double p_x;
+
+	iteration_best_ant = get_best_ant_from_iteration();
+	if(ant_colony[iteration_best_ant].tour_length < best_so_far_ant->tour_length){
+		transfer_solution(&ant_colony[iteration_best_ant], best_so_far_ant);
+		transfer_solution(&ant_colony[iteration_best_ant], restart_best_ant);
+
+		best_solution_iteration = iteration_counter;
+		restart_best_solution_iteration = iteration_counter;
+
+		//TODO(cgavidia): Complete implementation
+
+	}
 }
 
 int main(int argc, char *argv[]){
@@ -56,6 +84,10 @@ int main(int argc, char *argv[]){
 
 		while(!is_termination_condition_met()){
 			construct_solutions();
+			if (local_search_flag > 0){
+				apply_local_search();
+			}
+			update_statiscal_information();
 		}
 	}
 }

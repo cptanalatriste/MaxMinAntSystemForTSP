@@ -64,8 +64,11 @@ void update_statiscal_information(void){
 
 		best_solution_iteration = iteration_counter;
 		restart_best_solution_iteration = iteration_counter;
+		branching_factor_on_best_solution = compute_lambda_branching_factor(branching_factor_parameter);
+		average_branching_factor = branching_factor_on_best_solution;
 
-		//TODO(cgavidia): Complete implementation
+		if(!local_search_flag){
+		}
 
 	}
 }

@@ -29,6 +29,9 @@ double maximumTimeForOneTry;
 long int optimal_solution;
 
 double branching_factor_parameter;
+double average_branching_factor;
+double branching_factor_on_best_solution;
+
 double branchingFactorLimit;
 
 long int *bestInTry;
@@ -158,16 +161,16 @@ struct point *read_instance_file(const char *fileName){
 			fscanf(tsp_file, "%s", buf);
 			printf("%s\n", buf);
 			if( strcmp("TSP", buf) != 0 ) {
-			fprintf(stderr,"\n Not a TSP instance in TSPLIB format !!\n");
-			exit(1);
+				fprintf(stderr,"\n Not a TSP instance in TSPLIB format !!\n");
+				exit(1);
 			}
 			buf[0]=0;
 		} else if ( strcmp("TYPE:", buf) == 0 ) {
 			fscanf(tsp_file, "%s", buf);
 			printf("%s\n", buf);
 			if( strcmp("TSP", buf) != 0 ) {
-			fprintf(stderr,"\n Not a TSP instance in TSPLIB format !!\n");
-			exit(1);
+				fprintf(stderr,"\n Not a TSP instance in TSPLIB format !!\n");
+				exit(1);
 			}
 			buf[0]=0;
 		} else if( strcmp("DIMENSION", buf) == 0 ){
@@ -214,7 +217,7 @@ struct point *read_instance_file(const char *fileName){
 			buf[0]=0;
 		} else if( strcmp("EDGE_WEIGHT_TYPE:", buf) == 0 ){
 			/* set pointer to appropriate distance function; has to be one of 
-				EUC_2D, CEIL_2D, GEO, or ATT. Everything else fails */
+			EUC_2D, CEIL_2D, GEO, or ATT. Everything else fails */
 			buf[0]=0;
 			fscanf(tsp_file, "%s", buf);
 			printf("%s\n", buf);
@@ -256,4 +259,41 @@ struct point *read_instance_file(const char *fileName){
 	printf("number of cities is %ld\n",number_of_cities);
 	printf("\n... done\n");
 	return (nodeptr);
+}
+
+double compute_lambda_branching_factor(double lamda){
+	long int i;
+	long int m;
+	double minimum;
+	double maximum;
+	double cut_off;
+	double average;
+	double *branches_number;
+
+	branches_number =  calloc(number_of_cities, sizeof(double));
+	for(m = 0; m < number_of_cities; m++){
+		maximum = pheromone_matrix[m][instance.nearest_neighbours_list[m][1]];
+		minimum = pheromone_matrix[m][instance.nearest_neighbours_list[m][1]];
+		for (i = 1; i < nearest_neighbours_list_length; i++){
+			if(pheromone_matrix[m][instance.nearest_neighbours_list[m][i]] > maximum){
+				maximum = pheromone_matrix[m][instance.nearest_neighbours_list[m][i]];
+			}
+			if(pheromone_matrix[m][instance.nearest_neighbours_list[m][i]] < minimum){
+				minimum = pheromone_matrix[m][instance.nearest_neighbours_list[m][i]];
+			}
+		}
+		cut_off = minimum + lamda*(maximum - minimum);
+		for (i = 0; i< nearest_neighbours_list_length; i++){
+			if(pheromone_matrix[m][instance.nearest_neighbours_list[m][i]] > cut_off){
+				branches_number[m] += 1;
+			}
+		}
+	}
+	average = 0.0;
+	for (m = 0; m < number_of_cities; m++){
+		average += branches_number[m];
+	}
+	free(branches_number);
+
+	return (average/(double)(number_of_cities *2));
 }

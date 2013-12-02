@@ -9,13 +9,21 @@
 #include "ls.h"
 
 long int is_termination_condition_met(void){
-	return (constructed_tours_counter >= maximum_tours_one_try) &&
+	int response = (constructed_tours_counter >= maximum_tours_one_try) ||
 		(best_so_far_ant->tour_length <= optimal_solution);
+	printf("constructed_tours_counter: %d \n", constructed_tours_counter);
+	printf("maximum_tours_one_try: %d \n", maximum_tours_one_try);
+	printf("best_so_far_ant->tour_length: %d \n", best_so_far_ant->tour_length);
+	printf("optimal_solution: %d \n", optimal_solution);
+	printf("response: %d \n", response);
+	return response;
 }
 
 void construct_solutions(void){	
 	long int k;
 	long int construction_step_counter;
+
+	printf("before->constructed_tours_counter: %d \n", constructed_tours_counter);
 
 	for (k=0; k < number_of_ants; k++){
 		empty_ant_memory(&ant_colony[k]);
@@ -38,6 +46,7 @@ void construct_solutions(void){
 		ant_colony[k].tour_length = compute_tour_length(ant_colony[k].tour);
 	}
 	constructed_tours_counter += number_of_ants;
+	printf("after->constructed_tours_counter: %d \n", constructed_tours_counter);
 }
 
 void apply_local_search(void){
@@ -54,8 +63,8 @@ void apply_local_search(void){
 }
 
 void update_statiscal_information(void){
+
 	long int iteration_best_ant;
-	double p_x;
 
 	iteration_best_ant = get_best_ant_from_iteration();
 	if(ant_colony[iteration_best_ant].tour_length < best_so_far_ant->tour_length){
@@ -66,10 +75,14 @@ void update_statiscal_information(void){
 		restart_best_solution_iteration = iteration_counter;
 		branching_factor_on_best_solution = compute_lambda_branching_factor(branching_factor_parameter);
 		average_branching_factor = branching_factor_on_best_solution;
+		//There's specif behaviour for MMAS with no local search that is omitted.
+	}
 
-		if(!local_search_flag){
-		}
-
+	if(ant_colony[iteration_best_ant].tour_length < restart_best_ant->tour_length){
+		transfer_solution(&ant_colony[iteration_best_ant], restart_best_ant);
+		restart_best_solution_iteration = iteration_counter;
+		printf("restart best: %ld, restart_found_best: %ld \n", restart_best_ant->tour_length, 
+			restart_best_solution_iteration);
 	}
 }
 
@@ -86,6 +99,7 @@ int main(int argc, char *argv[]){
 		initialize_variables_for_trial(try_counter);
 
 		while(!is_termination_condition_met()){
+			printf("IN ITERATION!! \n");
 			construct_solutions();
 			if (local_search_flag > 0){
 				apply_local_search();

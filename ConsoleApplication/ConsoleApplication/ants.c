@@ -163,7 +163,6 @@ void choose_next_city_and_move(ant_struct *ant, long int construction_step){
 	double random;
 	double partial_sum = 0.0;
 	double sum_prob = 0.0;
-
 	double *selection_probabilities_aux;
 
 	if(best_choice_probability > 0.0 && 
@@ -249,7 +248,7 @@ void choose_global_best_next_city(ant_struct *ant, long int construction_step){
 	current_city = ant->tour[construction_step - 1];
 	best_value = -1;
 
-	for (city = 0; city < number_of_cities;){
+	for (city = 0; city < number_of_cities; city++){
 		if (!ant->visited[city] && 
 			pheromone_times_heuristic_matrix[current_city][city] > best_value){
 				next_city = city;

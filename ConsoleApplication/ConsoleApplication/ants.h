@@ -45,3 +45,6 @@ void choose_best_next_city(ant_struct* ant, long int construction_step);
 void choose_global_best_next_city(ant_struct* ant, long int construction_step);
 long int get_best_ant_from_iteration(void);
 void transfer_solution(ant_struct *from, ant_struct *to);
+void evaporate_pheromone_for_mmas(void);
+void reinforce_ant_solution_edges(ant_struct *ant);
+void calculate_pheromone_times_heuristic_for_neighbours(void);

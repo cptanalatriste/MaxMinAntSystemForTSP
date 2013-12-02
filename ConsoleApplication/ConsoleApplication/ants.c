@@ -284,3 +284,56 @@ void transfer_solution(ant_struct *from, ant_struct *to){
 	}
 	to->tour[number_of_cities] = from->tour[0];
 }
+
+void evaporate_pheromone_for_mmas(void){
+	long int i;
+	long int j;
+	long int help_city;
+
+	for (i = 0; i < number_of_cities; i++){
+		for( j = 0; j < nearest_neighbours_list_length; j++){
+			help_city = instance.nearest_neighbours_list[i][j];
+			pheromone_matrix[i][help_city] = (1 - evaporation_parameter) * 
+				pheromone_matrix[i][help_city];
+			if(pheromone_matrix[i][help_city] < minimum_pheromone_trail){
+				pheromone_matrix[i][help_city] = minimum_pheromone_trail;
+			}
+		}
+	}
+}
+
+void reinforce_ant_solution_edges(ant_struct *ant){
+	long int i;
+	long int j;
+	long int h;
+	double d_tau;
+
+	printf("global pheromone update \n");
+	d_tau = 1.0 / (double) ant->tour_length;
+	for (i = 0; i < number_of_cities; i++){
+		j = ant->tour[i];
+		h = ant->tour[i + 1];
+		pheromone_matrix[j][h] += d_tau;
+		pheromone_matrix[h][j] = pheromone_matrix[j][h];
+	}
+
+}
+
+void calculate_pheromone_times_heuristic_for_neighbours(void){
+	long int i;
+	long int j;
+	long int h;
+
+	printf("compute total information nn_list\n");
+	for (i = 0; i < number_of_cities; i++){
+		for(j = 0; j < nearest_neighbours_list_length; j++){
+			h = instance.nearest_neighbours_list[i][j];
+			if(pheromone_matrix[i][h] <pheromone_matrix[h][i]){
+				pheromone_matrix[h][i] = pheromone_matrix[i][h];
+			}
+			pheromone_times_heuristic_matrix[i][h] = pow(pheromone_matrix[i][h], trail_importance) *
+				pow(HEURISTIC(i, h), heuristic_value_importance);
+			pheromone_times_heuristic_matrix[h][i] = pheromone_times_heuristic_matrix[i][h];
+		}
+	}
+}

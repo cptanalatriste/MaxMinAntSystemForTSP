@@ -105,7 +105,9 @@ void set_default_parameters(void){
 	evaporation_parameter = 0.5;
 	best_choice_probability = 0.0;
 	maximum_independent_tries = 10;
-	maximum_tours_one_try = 0;
+
+	//cgavidia: This parameter defines execution time
+	maximum_tours_one_try = 500;
 
 	seed = (long int) time(NULL);
 	maximumTimeForOneTry = 10.0;

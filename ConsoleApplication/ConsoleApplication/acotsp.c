@@ -179,7 +179,7 @@ int main(int argc, char *argv[]){
 	free(ant_colony);
 	free(best_so_far_ant->tour);
 	free(best_so_far_ant->visited);
-	free(prob_of_selection);
+	free(selection_probabilities);
 	return(0);
 }
 

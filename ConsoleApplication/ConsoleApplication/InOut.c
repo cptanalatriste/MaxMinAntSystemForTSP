@@ -49,8 +49,8 @@ void init_program(long int argc, char *argv[]){
 
 	printf("Reading problem data - Starting... \n\n");
 	//Hard-coded value. Replace later for command line parameter.
-	//instance.nodes_array = read_instance_file("ulysses16.tsp");
-	instance.nodes_array = read_instance_file("eil51.tsp");
+	instance.nodes_array = read_instance_file("kroA100.tsp");
+	//instance.nodes_array = read_instance_file("eil51.tsp");
 
 	printf("Reading problem data - Done ... \n\n");
 

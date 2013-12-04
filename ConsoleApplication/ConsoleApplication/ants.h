@@ -16,7 +16,7 @@ extern ant_struct *restart_best_ant;
 extern double **pheromone_matrix;
 extern double **pheromone_times_heuristic_matrix;
 
-extern double *prob_of_selection;
+extern double *selection_probabilities;
 
 extern long int number_of_ants;
 extern long int nearest_neighbours_list_length;

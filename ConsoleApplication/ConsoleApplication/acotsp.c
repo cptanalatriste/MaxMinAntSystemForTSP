@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <limits.h>
+#include <stdlib.h>
 
 #include "InOut.h"
 #include "TSP.h"
@@ -11,11 +12,6 @@
 long int is_termination_condition_met(void){
 	int response = (constructed_tours_counter >= maximum_tours_one_try) ||
 		(best_so_far_ant->tour_length <= optimal_solution);
-	printf("constructed_tours_counter: %d \n", constructed_tours_counter);
-	printf("maximum_tours_one_try: %d \n", maximum_tours_one_try);
-	printf("best_so_far_ant->tour_length: %d \n", best_so_far_ant->tour_length);
-	printf("optimal_solution: %d \n", optimal_solution);
-	printf("response: %d \n", response);
 	return response;
 }
 
@@ -128,7 +124,27 @@ void update_pheromone_trails(void){
 
 }
 
+void verify_convergence(void){
+	printf("Search control and statistics \n");
+	if(!(iteration_counter % 100)){
+		//Some reporting methods are ommited
+		average_branching_factor = compute_lambda_branching_factor(branching_factor_parameter);
+		printf("\n best so far %ld, iteration: %ld \n", best_so_far_ant->tour_length, iteration_counter);
+		if((average_branching_factor < branching_factor_limit) && 
+			(iteration_counter - restart_best_solution_iteration > 250)){
+				printf("INIT TRAILS !!!\n");
+				restart_best_ant->tour_length = INFINITY;
+				initialize_pheromone_trails(maximum_pheromone_trail);
+				calculate_pheromone_times_heuristic_matrix();
+				restart_iteration = iteration_counter;
+		}
+		printf("try %li, iteration %li, b-fac %f \n\n",
+			try_counter, iteration_counter, average_branching_factor);
+	}
+}
+
 int main(int argc, char *argv[]){
+	long int i;
 	init_program(argc, argv);
 	instance.nearest_neighbours_list = compute_nearest_neighbours_list();
 	pheromone_matrix = generate_double_matrix(number_of_cities, 
@@ -147,9 +163,24 @@ int main(int argc, char *argv[]){
 			}
 			update_statiscal_information();
 			update_pheromone_trails();
+			verify_convergence();
 			iteration_counter++;
 		}
+		finish_trial(try_counter);
 	}
+	free(instance.distance_matrix);
+	free(instance.nearest_neighbours_list);
+	free(pheromone_matrix);
+	free(pheromone_times_heuristic_matrix);
+	for (i = 0; i <number_of_ants; i++){
+		free(ant_colony[i].tour);
+		free(ant_colony[i].visited);
+	}
+	free(ant_colony);
+	free(best_so_far_ant->tour);
+	free(best_so_far_ant->visited);
+	free(prob_of_selection);
+	return(0);
 }
 
 void initialize_variables_for_trial(long int try_number){

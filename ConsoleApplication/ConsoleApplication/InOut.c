@@ -32,7 +32,7 @@ double branching_factor_parameter;
 double average_branching_factor;
 double branching_factor_on_best_solution;
 
-double branchingFactorLimit;
+double branching_factor_limit;
 
 long int *bestInTry;
 long int *bestFoundAt;
@@ -107,13 +107,13 @@ void set_default_parameters(void){
 	maximum_independent_tries = 10;
 
 	//cgavidia: This parameter defines execution time
-	maximum_tours_one_try = 500;
+	maximum_tours_one_try = 300000;
 
 	seed = (long int) time(NULL);
 	maximumTimeForOneTry = 10.0;
 
 	optimal_solution = 1;
-	branchingFactorLimit = 1.00001;
+	branching_factor_limit = 1.00001;
 	iterations_to_update_best_ant = INFINITY;
 	max_min_ant_system_flag = TRUE;
 	number_of_elitist_ants = 0;	
@@ -298,4 +298,37 @@ double compute_lambda_branching_factor(double lamda){
 	free(branches_number);
 
 	return (average/(double)(number_of_cities *2));
+}
+
+void finish_trial(long int try_number){
+	is_tour_feasible(best_so_far_ant->tour);
+	printf("\n Best Solution in try %ld is %ld\n",try_number, best_so_far_ant->tour_length);
+	printf(" Best Solution was found after %ld iterations\n", best_solution_iteration);
+
+}
+
+
+void is_tour_feasible(long int *tour){
+	long int i;
+	long int sum = 0;
+	for (i = 0; i < number_of_cities; i++){
+		sum += tour[i];
+	}
+	if(sum != (number_of_cities - 1)*number_of_cities/2){
+		fprintf(stderr, "Next tour must be flawed!! \n");
+		print_tour(tour);
+		exit(1);
+	}
+}
+
+void print_tour(long int *tour){
+	long int i;
+	printf("\n");
+	for (i = 0; i < number_of_cities; i++){
+		if (! i%25){
+			printf("\n");
+		}
+		printf("%ld ", tour[i]);
+	}
+	printf("Tour length = %ld\n\n",compute_tour_length(tour));
 }

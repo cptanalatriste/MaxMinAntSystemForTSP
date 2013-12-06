@@ -1,6 +1,6 @@
-AntColonyImageSegmentation
+MaxMinAntSystemForTSP 
 ==========================
 
-Ant Colony Algorithm for image segmentation, using CUDA Architecture.
+MMMAS Ant Colony Algorithm for the Travelling Salesman Problem.
 
-Strongly based and inspired in the work of Thomas Stuetzle, available from http://www.aco-metaheuristic.org/aco-code. 
+This repository is a basic refactoring of the work of Thomas Stuetzle, available from http://www.aco-metaheuristic.org/aco-code. 
